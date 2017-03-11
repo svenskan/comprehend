@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+import base64
+import googleapiclient.discovery
+import sys
+
+
+class Error(Exception):
+    def __init__(self, *arguments):
+        super(Error, self).__init__(*arguments)
+
+
+def main(phrase):
+    with open(phrase, 'rb') as speech:
+        data = base64.b64encode(speech.read())
+    body = {
+        'config': {
+            'encoding': 'FLAC',
+            'sampleRate': 44100,
+            'languageCode': 'sv-SE',
+        },
+        'audio': {
+            'content': data.decode('UTF-8'),
+        },
+    }
+    service = googleapiclient.discovery.build('speech', 'v1beta1')
+    request = service.speech().syncrecognize(body=body)
+    response = request.execute()
+    print('Phrase: {}'.format(phrase))
+    for result in response.get('results', []):
+        for alternative in result['alternatives']:
+            print('Transcript: {}'.format(alternative['transcript']))
+
+if __name__ == '__main__':
+    try:
+        phrase = ' '.join(sys.argv[1:]).strip()
+        if len(phrase) == 0:
+            raise Error('expected a nonempty phrase')
+        main(phrase)
+    except Error as e:
+        print('Error: {}.'.format(e))
