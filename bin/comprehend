@@ -39,19 +39,19 @@ def transcribe(data):
     return alternatives
 
 def main():
-    print('Pronounce a phrase!')
+    print('Say a sentence!')
     while True:
         data = record()
         print('Transcribing...')
         alternatives = transcribe(data)
         if len(alternatives) == 0:
-            print('Try again. Pronounce the phrase!')
+            print('Try again. Repeat the sentence!')
             continue
         break
     confidence = [alternative['confidence'] for alternative in alternatives]
     index, confidence = max(enumerate(confidence), key=operator.itemgetter(1))
     transcript = alternatives[index]['transcript']
-    print('Your phrase: “{}” (confidence {}%)'.format(
+    print('Your sentence: {} (confidence {}%)'.format(
         transcript, int(100 * confidence)))
 
 if __name__ == '__main__':
