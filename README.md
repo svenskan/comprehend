@@ -7,7 +7,7 @@ A tool for checking Swedish pronunciation using [Google Cloud Speech API][1].
 ```bash
 brew install sox --with-flac
 pip install google-api-python-client
-export GOOGLE_APPLICATION_CREDENTIALS="<PATH TO A SERVICE ACCOUNT’S CREDENTIALS>"
+export GOOGLE_APPLICATION_CREDENTIALS="<PATH TO YOUR SERVICE ACCOUNT’S CREDENTIALS>"
 ```
 
 The instructions for setting up a service account can be found [here][2].
