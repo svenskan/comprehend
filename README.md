@@ -4,8 +4,6 @@ A tool for checking Swedish pronunciation using [Google Cloud Speech API][1].
 
 ## Installation
 
-Clone the repository and then run:
-
 ```bash
 brew install sox --with-flac
 pip install google-api-python-client
