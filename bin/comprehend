@@ -15,7 +15,7 @@ def record(name='recording'):
                      'silence', '1', '0.1', '3%', '1', '3.0', '3%'])
     subprocess.call(['sox', '-q', '-V0', one, two,
                      'remix', '1,2'])
-    data = base64.b64encode(open(two, 'rb').read())
+    data = open(two, 'rb').read()
     os.remove(one)
     os.remove(two)
     return data
@@ -28,7 +28,7 @@ def transcribe(data):
             'languageCode': 'sv-SE',
         },
         'audio': {
-            'content': data.decode('UTF-8'),
+            'content': base64.b64encode(data).decode('UTF-8'),
         },
     }
     service = googleapiclient.discovery.build('speech', 'v1beta1')
