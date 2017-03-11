@@ -5,7 +5,6 @@ import googleapiclient.discovery
 import operator
 import os
 import subprocess
-import sys
 
 
 class Error(Exception):
@@ -26,9 +25,7 @@ def record(name='recording'):
     os.remove(two)
     return data
 
-def main(phrase):
-    print('Pronounce the phrase!')
-    data = record()
+def transcribe(data):
     body = {
         'config': {
             'encoding': 'FLAC',
@@ -39,25 +36,32 @@ def main(phrase):
             'content': data.decode('UTF-8'),
         },
     }
-    print('Transcribing...')
     service = googleapiclient.discovery.build('speech', 'v1beta1')
     request = service.speech().syncrecognize(body=body)
     response = request.execute()
     alternatives = []
     for result in response.get('results', []):
         alternatives.extend(result['alternatives'])
-    if len(alternatives) == 0:
-        raise Error('failed to transcribe')
-    scores = [alternative['confidence'] for alternative in alternatives]
-    index, _ = max(enumerate(scores), key=operator.itemgetter(1))
+    return alternatives
+
+def main():
+    print('Pronounce a phrase!')
+    while True:
+        data = record()
+        print('Transcribing...')
+        alternatives = transcribe(data)
+        if len(alternatives) == 0:
+            print('Try again. Pronounce the phrase!')
+            continue
+        break
+    confidence = [alternative['confidence'] for alternative in alternatives]
+    index, confidence = max(enumerate(confidence), key=operator.itemgetter(1))
     transcript = alternatives[index]['transcript']
-    print('Transcript: {}'.format(transcript))
+    print('Your phrase: “{}” (confidence {}%)'.format(
+        transcript, int(100 * confidence)))
 
 if __name__ == '__main__':
     try:
-        phrase = ' '.join(sys.argv[1:]).strip()
-        if len(phrase) == 0:
-            raise Error('expected a nonempty phrase')
-        main(phrase)
+        main()
     except Error as e:
         print('Error: {}.'.format(e))
