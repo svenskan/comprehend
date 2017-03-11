@@ -14,7 +14,7 @@ def record(name='recording'):
         two = os.path.join(directory, 'two.flac')
         subprocess.call(['rec', '-q', '-V0', one,
                          'rate', '44100',
-                         'silence', '1', '0.1', '3%', '1', '3.0', '3%'])
+                         'silence', '0', '1', '1.0', '1%'])
         subprocess.call(['sox', '-q', '-V0', one, two,
                          'remix', '1,2'])
         return open(two, 'rb').read()
