@@ -48,11 +48,10 @@ def main():
             print('Try again. Repeat the sentence!')
             continue
         break
-    confidence = [alternative['confidence'] for alternative in alternatives]
-    index, confidence = max(enumerate(confidence), key=operator.itemgetter(1))
+    scores = [alternative['confidence'] for alternative in alternatives]
+    index, score = max(enumerate(scores), key=operator.itemgetter(1))
     transcript = alternatives[index]['transcript']
-    print('Your sentence: {} (confidence {}%)'.format(
-        transcript, int(100 * confidence)))
+    print('Your sentence: {} (score {:.2f})'.format(transcript, score))
 
 if __name__ == '__main__':
     main()
