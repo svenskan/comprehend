@@ -7,11 +7,6 @@ import os
 import subprocess
 
 
-class Error(Exception):
-    def __init__(self, *arguments):
-        super(Error, self).__init__(*arguments)
-
-
 def record(name='recording'):
     one = '{}1.flac'.format(name)
     two = '{}2.flac'.format(name)
@@ -61,7 +56,4 @@ def main():
         transcript, int(100 * confidence)))
 
 if __name__ == '__main__':
-    try:
-        main()
-    except Error as e:
-        print('Error: {}.'.format(e))
+    main()
