@@ -40,7 +40,10 @@ def check_line(line):
     print('Good!')
 
 def clean(line):
-    return re.sub(r'[^a-z ]', '', line.strip().lower())
+    line = line.lower()
+    line = re.sub(r'[^a-z]', ' ', line)
+    line = re.sub(r'\s+', ' ', line)
+    return line.strip()
 
 def compare(one, two):
     return clean(one) == clean(two)
