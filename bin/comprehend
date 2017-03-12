@@ -27,8 +27,9 @@ def check_file(path):
             print('You said: “{}” (score {:.2f})'.format(
                 transcript['text'], transcript['score']))
             return compare(line, transcript['text'])
-        run('“{}”'.format(line), _callback)
-        print('Good!\n')
+        run('“{}”'.format(line), _callback, count=5)
+        print('Good! Press Enter for one more.')
+        input()
 
 def check_line(line):
     def _callback(transcript):
@@ -62,10 +63,10 @@ def record(name='recording'):
                          'remix', '1,2'])
         return open(two, 'rb').read()
 
-def run(what, callback):
+def run(what, callback, count=3):
     while True:
         print('Say {} in '.format(what), end='')
-        countdown(3)
+        countdown(count)
         print('Recording…')
         data = record()
         print('Transcribing…')
