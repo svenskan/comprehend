@@ -5,6 +5,7 @@ import googleapiclient.discovery
 import operator
 import os
 import random
+import re
 import subprocess
 import sys
 import tempfile
@@ -22,14 +23,26 @@ def check_file(path):
             lines.append(line.strip())
     while True:
         line = random.choice(lines)
-        transcript = run("“{}”".format(line), lambda _: True)
-        print('You said: “{}” (score {:.2f})'.format(
-            transcript['text'], transcript['score']))
+        def _callback(transcript):
+            print('You said: “{}” (score {:.2f})'.format(
+                transcript['text'], transcript['score']))
+            return compare(line, transcript['text'])
+        run('“{}”'.format(line), _callback)
+        print('Good!\n')
 
 def check_line(line):
-    transcript = run("“{}”".format(line), lambda _: True)
-    print('You said: “{}” (score {:.2f})'.format(
-        transcript['text'], transcript['score']))
+    def _callback(transcript):
+        print('You said: “{}” (score {:.2f})'.format(
+            transcript['text'], transcript['score']))
+        return compare(line, transcript['text'])
+    run('“{}”'.format(line), _callback)
+    print('Good!')
+
+def clean(line):
+    return re.sub(r'[^a-z ]', '', line.strip().lower())
+
+def compare(one, two):
+    return clean(one) == clean(two)
 
 def countdown(count):
     for i in reversed(range(count)):
