@@ -10,6 +10,14 @@ pip install google-api-python-client
 export GOOGLE_APPLICATION_CREDENTIALS="<PATH TO YOUR SERVICE ACCOUNT’S CREDENTIALS>"
 ```
 
+## Usage
+
+```bash
+./bin/comprehend                 # check an arbitrary phrase
+./bin/comprehend Hej då!         # check a specific phrase
+./bin/comprehend phrases.txt     # check random phrases from a file
+```
+
 The instructions for setting up a service account can be found [here][2].
 
 [1]: https://cloud.google.com/speech/
