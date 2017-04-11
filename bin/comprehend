@@ -2,6 +2,7 @@
 
 import base64
 import googleapiclient.discovery
+import googleapiclient.errors
 import operator
 import os
 import random
@@ -92,7 +93,10 @@ def transcribe(data):
     }
     service = googleapiclient.discovery.build('speech', 'v1beta1')
     request = service.speech().syncrecognize(body=body)
-    response = request.execute()
+    try:
+        response = request.execute()
+    except googleapiclient.errors.HttpError:
+        return None
     alternatives = []
     for result in response.get('results', []):
         alternatives.extend(result['alternatives'])
